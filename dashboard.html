@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEL & Motivation Analytics | Creativity Generation Schools</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            sidebar: '#003B35',
+                            teal: '#005C53',
+                            tealLight: '#047865',
+                            gold: '#C5A059',
+                            goldLight: '#E2C382',
+                            bgLight: '#F1F5F9',
+                            cardBg: '#FFFFFF',
+                            borderCustom: '#E2E8F0'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome, Chart.js & Alpine.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Firebase SDK (Modular v10) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // بيانات مشروع Firebase الخاص بك (CG-Analytics)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDiThj12EYjceD13LGF7s7GgUVZKUkVTiY",
+            authDomain: "cg-analytics-efb4e.firebaseapp.com",
+            projectId: "cg-analytics-efb4e",
+            storageBucket: "cg-analytics-efb4e.firebasestorage.app",
+            messagingSenderId: "759844772709",
+            appId: "1:759844772709:web:af644a3ada57bf134e1f8c",
+            measurementId: "G-61Y9KVL3N0"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // إتاحة الكائنات إقليمياً لـ Alpine.js
+        window.db = db;
+        window.firestoreTools = { collection, onSnapshot, query, where };
+    </script>
+</head>
+<body class="bg-brand-bgLight text-gray-800 font-sans antialiased min-h-screen flex" x-data="dashboardApp()" dir="ltr">
+
+    <!-- ================= SIDEBAR (Fixed on the Left) ================= -->
+    <aside class="w-72 bg-brand-sidebar text-white flex flex-col justify-between p-6 shrink-0 shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-48 h-48 bg-brand-teal/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div>
+            <!-- School Logo & Branding -->
+            <div class="flex items-center space-x-3 pb-6 border-b border-white/10">
+                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center p-1.5 shadow-lg shrink-0">
+                    <img src="https://cgschool.com.sa/wp-content/uploads/2025/04/logo-3-1.webp" alt="School Logo" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="text-[10px] font-bold uppercase tracking-wider text-brand-gold">Creativity Generation</h1>
+                    <p class="text-xs text-white/70">Schools Dashboard</p>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="mt-6 space-y-2">
+                <a href="#" class="flex items-center space-x-3 py-3 px-4 rounded-xl bg-brand-teal text-white font-bold text-sm shadow-md transition-all">
+                    <i class="fa-solid fa-chart-pie w-5"></i>
+                    <span>Analytics Dashboard</span>
+                </a>
+            </nav>
+
+            <!-- Subject Filter -->
+            <div class="mt-8 pt-6 border-t border-white/10">
+                <label class="block text-xs font-bold text-brand-gold uppercase mb-2">Select Subject</label>
+                <div class="space-y-1.5">
+                    <template x-for="subj in subjects" :key="subj.id">
+                        <button @click="selectedSubject = subj.id; fetchRealtimeData()" 
+                                class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between"
+                                :class="selectedSubject === subj.id ? 'bg-brand-gold text-brand-sidebar shadow-lg scale-[1.02]' : 'bg-white/5 hover:bg-white/10 text-white/80'">
+                            <span x-text="subj.name"></span>
+                            <i class="fa-solid fa-chevron-right text-[10px]" x-show="selectedSubject === subj.id"></i>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Grade Filter -->
+            <div class="mt-6 pt-6 border-t border-white/10">
+                <label class="block text-xs font-bold text-brand-gold uppercase mb-2">Grade Level</label>
+                <select x-model="selectedGrade" @change="fetchRealtimeData()" class="w-full p-2.5 rounded-xl bg-white/10 text-white border border-white/20 text-xs font-bold outline-none focus:ring-2 focus:ring-brand-gold">
+                    <option value="All" class="bg-brand-sidebar">All Grades</option>
+                    <option value="2-3" class="bg-brand-sidebar">Grades (2-3)</option>
+                    <option value="4-5" class="bg-brand-sidebar">Grades (4-5)</option>
+                    <option value="6-12" class="bg-brand-sidebar">Grades (6-12)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="pt-6 border-t border-white/10">
+            <div class="text-center text-[10px] text-white/50">
+                <span>MansourDev22 • 2026</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN CONTENT AREA ================= -->
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+
+        <!-- Top Header Bar -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 bg-white p-6 rounded-3xl shadow-sm border border-brand-borderCustom gap-4">
+            <div>
+                <span class="text-xs font-bold text-brand-gold uppercase tracking-wider" x-text="getSubjectName()"></span>
+                <h2 class="text-2xl font-black text-brand-teal mt-1">SEL & Motivation Deep Analytics</h2>
+            </div>
+            <div class="flex items-center space-x-3">
+                <span class="flex items-center space-x-2 bg-emerald-50 text-emerald-700 px-3.5 py-2 rounded-full text-xs font-bold border border-emerald-200 shadow-sm">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span>Firebase Live Connected</span>
+                </span>
+            </div>
+        </header>
+
+        <!-- KPI Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-3xl border border-brand-borderCustom shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase">Total Responses</p>
+                    <h3 class="text-3xl font-black text-brand-teal mt-1" x-text="kpis.responses"></h3>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-teal-50 text-brand-teal flex items-center justify-center text-2xl shadow-inner">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl border border-brand-borderCustom shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase">SEL Score</p>
+                    <h3 class="text-3xl font-black text-brand-teal mt-1" x-text="kpis.selScore + ' / 5'"></h3>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl shadow-inner">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl border border-brand-borderCustom shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase">Motivation Index</p>
+                    <h3 class="text-3xl font-black text-brand-gold mt-1" x-text="kpis.motScore + ' / 5'"></h3>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-amber-50 text-brand-gold flex items-center justify-center text-2xl shadow-inner">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl border border-brand-borderCustom shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase">Satisfaction Rate</p>
+                    <h3 class="text-3xl font-black text-brand-teal mt-1" x-text="kpis.satisfaction + '%'"></h3>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl shadow-inner">
+                    <i class="fa-solid fa-face-smile"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clean & Clear Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div class="bg-white p-8 rounded-3xl border border-brand-borderCustom shadow-sm flex flex-col">
+                <h3 class="text-base font-bold text-brand-teal mb-4">CASEL SEL Competencies Breakdown</h3>
+                <div class="w-full h-80 relative flex items-center justify-center">
+                    <canvas id="selRadarChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl border border-brand-borderCustom shadow-sm flex flex-col">
+                <h3 class="text-base font-bold text-brand-teal mb-4">Student Motivation & Engagement Factors</h3>
+                <div class="w-full h-80 relative flex items-center justify-center">
+                    <canvas id="motBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Item-by-Item Breakdown -->
+        <div class="bg-white p-8 rounded-3xl border border-brand-borderCustom shadow-sm">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-4 border-b border-brand-borderCustom gap-4">
+                <div>
+                    <h3 class="text-lg font-black text-brand-teal">Detailed Item-by-Item Breakdown (30 Items)</h3>
+                    <p class="text-xs text-gray-400 mt-1">Real-time statistics fetched from Firestore responses.</p>
+                </div>
+                <div class="flex bg-brand-bgLight p-1 rounded-xl border border-brand-borderCustom">
+                    <button @click="activeTab = 'sel'" class="px-4 py-2 rounded-lg text-xs font-bold transition-all" :class="activeTab === 'sel' ? 'bg-brand-teal text-white shadow' : 'text-gray-600'">
+                        SEL (15 Items)
+                    </button>
+                    <button @click="activeTab = 'mot'" class="px-4 py-2 rounded-lg text-xs font-bold transition-all" :class="activeTab === 'mot' ? 'bg-brand-gold text-white shadow' : 'text-gray-600'">
+                        Motivation (15 Items)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Items List -->
+            <div class="space-y-4">
+                <template x-for="(q, idx) in (activeTab === 'sel' ? selQuestionsList : motQuestionsList)" :key="idx">
+                    <div class="p-5 rounded-2xl bg-brand-bgLight/50 border border-brand-borderCustom hover:border-brand-teal/40 transition-all">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div class="flex items-start space-x-3 flex-1">
+                                <span class="w-8 h-8 rounded-xl bg-brand-teal text-white flex items-center justify-center text-xs font-black shrink-0" x-text="idx + 1"></span>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800" x-text="q.text"></p>
+                                    <span class="inline-block mt-1 px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-brand-gold/10 text-brand-gold" x-text="q.category"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-6 shrink-0 w-full md:w-auto justify-between md:justify-end">
+                                <div>
+                                    <span class="text-[10px] uppercase font-bold text-gray-400">Agreement</span>
+                                    <p class="text-sm font-black text-brand-teal" x-text="q.score + '%'"></p>
+                                </div>
+                                <div class="w-32 bg-gray-200 h-3 rounded-full overflow-hidden">
+                                    <div class="bg-gradient-to-r from-brand-teal to-brand-gold h-full rounded-full transition-all duration-500" :style="'width: ' + q.score + '%'"></div>
+                                </div>
+                                <span class="text-xs font-bold text-gray-600 bg-white px-3 py-1.5 rounded-xl border border-brand-borderCustom shadow-sm" x-text="(q.score / 20).toFixed(1) + ' / 5'"></span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Application Script -->
+    <script>
+        function dashboardApp() {
+            return {
+                selectedSubject: 'science',
+                selectedGrade: 'All',
+                activeTab: 'sel',
+                subjects: [
+                    { id: 'science', name: 'Science' },
+                    { id: 'math', name: 'Math' },
+                    { id: 'english', name: 'English' },
+                    { id: 'arabic', name: 'Arabic' },
+                    { id: 'islamic', name: 'Islamic Studies' }
+                ],
+                kpis: {
+                    responses: '0',
+                    selScore: '0.00',
+                    motScore: '0.00',
+                    satisfaction: '0'
+                },
+                radarData: [0, 0, 0, 0, 0],
+                barData: [0, 0, 0, 0, 0],
+                selRadarInstance: null,
+                motBarInstance: null,
+                unsubscribeListener: null,
+
+                selQuestionsList: [
+                    { category: 'Self-Awareness', text: 'I know what I am good at and what I need to improve in this subject.', score: 0 },
+                    { category: 'Self-Awareness', text: 'I can tell how I feel when a task is hard or when I make a mistake.', score: 0 },
+                    { category: 'Self-Awareness', text: 'This subject helps me believe I can get better by practicing.', score: 0 },
+                    { category: 'Self-Management', text: 'I stay calm when an activity or experiment does not work the first time.', score: 0 },
+                    { category: 'Self-Management', text: 'I keep trying when a problem or assignment is difficult.', score: 0 },
+                    { category: 'Self-Management', text: 'I stay focused and finish my work on time.', score: 0 },
+                    { category: 'Social Awareness', text: "I listen carefully to my classmates' ideas.", score: 0 },
+                    { category: 'Social Awareness', text: 'I respect classmates whose ideas or answers are different from mine.', score: 0 },
+                    { category: 'Social Awareness', text: 'I help classmates who find the subject difficult.', score: 0 },
+                    { category: 'Relationship Skills', text: 'I work well with others during group projects and activities.', score: 0 },
+                    { category: 'Relationship Skills', text: 'I share my ideas politely when working in a group.', score: 0 },
+                    { category: 'Relationship Skills', text: 'My group solves disagreements in a respectful way.', score: 0 },
+                    { category: 'Responsible Decision', text: 'I follow safety rules in the classroom and lab.', score: 0 },
+                    { category: 'Responsible Decision', text: 'I use evidence and facts to make decisions in my learning.', score: 0 },
+                    { category: 'Responsible Decision', text: 'This subject helps me make choices that protect people and the environment.', score: 0 }
+                ],
+
+                motQuestionsList: [
+                    { category: 'Enjoyment', text: 'I enjoy my lessons in this subject.', score: 0 },
+                    { category: 'Enjoyment', text: 'I look forward to attending this class.', score: 0 },
+                    { category: 'Enjoyment', text: 'I like learning new things about this subject.', score: 0 },
+                    { category: 'Confidence', text: 'I can understand what I learn in this subject.', score: 0 },
+                    { category: 'Confidence', text: 'I can do well in this subject if I try.', score: 0 },
+                    { category: 'Confidence', text: 'I feel confident when I do class activities and assignments.', score: 0 },
+                    { category: 'Utility', text: 'This subject helps me understand the world around me.', score: 0 },
+                    { category: 'Utility', text: 'I use what I learn in this subject in my daily life.', score: 0 },
+                    { category: 'Utility', text: 'This subject is important for my future.', score: 0 },
+                    { category: 'Engagement', text: 'I try my best, even when the work is hard.', score: 0 },
+                    { category: 'Engagement', text: 'I ask questions when I want to know more.', score: 0 },
+                    { category: 'Engagement', text: 'I like exploring this subject outside school (videos, books, projects).', score: 0 },
+                    { category: 'Environment', text: 'My teacher makes lessons interesting.', score: 0 },
+                    { category: 'Environment', text: 'I enjoy hands-on activities and practical tasks in class.', score: 0 },
+                    { category: 'Environment', text: 'I feel comfortable sharing my ideas in class.', score: 0 }
+                ],
+
+                init() {
+                    setTimeout(() => {
+                        this.renderCharts();
+                        this.fetchRealtimeData();
+                    }, 500);
+                },
+                getSubjectName() {
+                    let found = this.subjects.find(s => s.id === this.selectedSubject);
+                    return found ? `${found.name} Subject • Creativity Generation Schools` : '';
+                },
+                fetchRealtimeData() {
+                    if (!window.db) return;
+
+                    if (this.unsubscribeListener) this.unsubscribeListener();
+
+                    const { collection, onSnapshot, query, where } = window.firestoreTools;
+                    const responsesRef = collection(window.db, "responses");
+
+                    let q = query(responsesRef, where("subject", "==", this.selectedSubject));
+
+                    this.unsubscribeListener = onSnapshot(q, (snapshot) => {
+                        let docs = snapshot.docs.map(doc => doc.data());
+
+                        if (this.selectedGrade !== 'All') {
+                            docs = docs.filter(d => d.grade === this.selectedGrade);
+                        }
+
+                        this.processFirebaseData(docs);
+                    }, (error) => {
+                        console.log("Firestore status: Waiting for initial data collection creation.");
+                    });
+                },
+                processFirebaseData(docs) {
+                    if (docs.length === 0) {
+                        this.kpis.responses = 0;
+                        this.kpis.selScore = "0.00";
+                        this.kpis.motScore = "0.00";
+                        this.kpis.satisfaction = "0";
+                        this.radarData = [0, 0, 0, 0, 0];
+                        this.barData = [0, 0, 0, 0, 0];
+                        
+                        // تصفير جميع الأسئلة
+                        this.selQuestionsList.forEach(q => q.score = 0);
+                        this.motQuestionsList.forEach(q => q.score = 0);
+
+                        this.renderCharts();
+                        return;
+                    }
+
+                    this.kpis.responses = docs.length;
+
+                    let selSum = docs.reduce((acc, curr) => acc + (curr.selAverage || 0), 0);
+                    let motSum = docs.reduce((acc, curr) => acc + (curr.motAverage || 0), 0);
+
+                    this.kpis.selScore = (selSum / docs.length).toFixed(2);
+                    this.kpis.motScore = (motSum / docs.length).toFixed(2);
+                    this.kpis.satisfaction = Math.round((this.kpis.selScore / 5) * 100);
+
+                    // تحديث القيم الحقيقية للرسوم البيانية والأسئلة إن وجدت استجابات
+                    if (docs[0].itemScores) {
+                        this.selQuestionsList.forEach((q, i) => {
+                            if (docs[0].itemScores.sel && docs[0].itemScores.sel[i] !== undefined) {
+                                q.score = docs[0].itemScores.sel[i];
+                            }
+                        });
+                        this.motQuestionsList.forEach((q, i) => {
+                            if (docs[0].itemScores.mot && docs[0].itemScores.mot[i] !== undefined) {
+                                q.score = docs[0].itemScores.mot[i];
+                            }
+                        });
+                    }
+
+                    this.renderCharts();
+                },
+                renderCharts() {
+                    const ctxSel = document.getElementById('selRadarChart').getContext('2d');
+                    if (this.selRadarInstance) this.selRadarInstance.destroy();
+
+                    this.selRadarInstance = new Chart(ctxSel, {
+                        type: 'radar',
+                        data: {
+                            labels: ['Self-Awareness', 'Self-Management', 'Social Awareness', 'Relationship Skills', 'Responsible Decision'],
+                            datasets: [{
+                                label: 'Current Competency Level',
+                                data: this.radarData,
+                                backgroundColor: 'rgba(0, 92, 83, 0.2)',
+                                borderColor: '#005C53',
+                                borderWidth: 3,
+                                pointBackgroundColor: '#C5A059'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: { r: { min: 0, max: 5 } }
+                        }
+                    });
+
+                    const ctxMot = document.getElementById('motBarChart').getContext('2d');
+                    if (this.motBarInstance) this.motBarInstance.destroy();
+
+                    this.motBarInstance = new Chart(ctxMot, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Enjoyment', 'Confidence', 'Utility', 'Engagement', 'Environment'],
+                            datasets: [{
+                                label: 'Index Score (out of 5)',
+                                data: this.barData,
+                                backgroundColor: '#C5A059',
+                                borderRadius: 10
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: { y: { min: 0, max: 5 } }
+                        }
+                    });
+                }
+            }
+        }
+    </script>
+</body>
+</html>

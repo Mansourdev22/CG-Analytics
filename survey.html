@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlDoc">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creativity Generation Schools - Student Survey</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cgDarkTeal: '#003B35',
+                        cgTeal: '#005C53',
+                        cgLightTeal: '#E6F0EE',
+                        cgGold: '#C5A059',
+                        cgLightGold: '#F8F4EA',
+                        cgGoldHover: '#B28E46'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Cairo', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F3F4F6;
+            font-family: 'Inter', 'Cairo', sans-serif;
+        }
+        .option-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .option-card:hover {
+            transform: translateY(-2px);
+        }
+        .bg-cg-gradient {
+            background: linear-gradient(135deg, #003B35 0%, #005C53 100%);
+        }
+        .bg-gold-gradient {
+            background: linear-gradient(135deg, #C5A059 0%, #B28E46 100%);
+        }
+        .custom-radio:checked + div {
+            border-color: #C5A059;
+            background-color: #F8F4EA;
+            color: #003B35;
+            box-shadow: 0 4px 6px -1px rgba(197, 160, 89, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-gray-800 flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-cgDarkTeal text-white shadow-lg sticky top-0 z-50 border-b-4 border-cgGold">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                <img src="https://cgschool.com.sa/wp-content/uploads/2025/04/logo-3-1.webp" alt="Creativity Generation Schools Logo" class="h-12 w-auto object-contain bg-white rounded-lg p-1 shadow">
+                <div>
+                    <h1 id="headerSchoolName" class="font-bold text-base sm:text-lg text-white tracking-wide">Creativity Generation Schools</h1>
+                    <p id="headerTagline" class="text-xs text-cgGold font-semibold">Student Voice & Educational Experience</p>
+                </div>
+            </div>
+
+            <!-- Language Switcher Button -->
+            <button id="btnToggleLang" class="bg-white/10 hover:bg-white/20 text-white border border-cgGold/50 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2">
+                <i class="fa-solid fa-globe text-cgGold"></i>
+                <span id="langBtnText">العربية</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-grow">
+
+        <!-- Banner Card -->
+        <div class="bg-cg-gradient rounded-2xl p-6 text-white shadow-xl mb-6 relative overflow-hidden border border-cgGold/30">
+            <div class="absolute ltr:-right-8 rtl:-left-8 -bottom-8 opacity-10 text-white text-9xl pointer-events-none">
+                <i class="fa-solid fa-lightbulb"></i>
+            </div>
+            <div class="relative z-10">
+                <div id="bannerTag" class="inline-block px-3 py-1 bg-cgGold/20 rounded-lg text-cgGold text-xs font-bold uppercase tracking-wider mb-2">
+                    Learning & Motivation Survey
+                </div>
+                <h2 id="bannerTitle" class="text-2xl md:text-3xl font-extrabold mb-2">Social-Emotional Learning & Motivation Survey</h2>
+                <p id="bannerDesc" class="text-gray-200 text-sm md:text-base max-w-2xl">
+                    Your opinion matters! Your honest responses help us improve and create an engaging learning environment for everyone.
+                </p>
+            </div>
+        </div>
+
+        <!-- Progress Bar Container -->
+        <div id="progressContainer" class="hidden bg-white rounded-xl p-4 shadow-sm mb-6 border border-gray-200">
+            <div class="flex justify-between items-center text-xs md:text-sm font-semibold text-cgDarkTeal mb-2">
+                <span id="progressText">Page 1 of 2</span>
+                <span id="progressPercentage" class="text-cgGold font-bold">0% completed</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                <div id="progressBar" class="bg-gold-gradient h-3 rounded-full transition-all duration-300 w-0"></div>
+            </div>
+            <div id="sectionBadge" class="mt-2 text-xs font-bold text-gray-500 flex items-center gap-1">
+                <i class="fa-solid fa-layer-group text-cgGold"></i>
+                <span id="sectionBadgeText">Section 1: Social-Emotional Learning (SEL)</span>
+            </div>
+        </div>
+
+        <!-- MAIN FORM CONTAINER -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+
+            <!-- STEP 0: Student Info Setup -->
+            <div id="stepSetup" class="p-6 md:p-8 space-y-6">
+                <div class="border-b pb-4">
+                    <h3 id="setupTitle" class="text-xl font-bold text-cgDarkTeal flex items-center gap-2">
+                        <i class="fa-solid fa-user-gear text-cgGold"></i>
+                        Subject & Grade Level Setup
+                    </h3>
+                    <p id="setupSub" class="text-xs text-gray-500 mt-1">Please select your subject and grade level to begin (No student name required).</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Subject Selection -->
+                    <div>
+                        <label id="lblSubject" class="block text-sm font-bold text-gray-700 mb-2">
+                            Select Subject <span class="text-red-500">*</span>
+                        </label>
+                        <select id="subjectSelect" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-cgGold focus:border-cgGold outline-none transition">
+                            <!-- Injected by JS -->
+                        </select>
+                        <p id="subjectError" class="text-xs text-red-500 mt-1 hidden">Please select a subject.</p>
+                    </div>
+
+                    <!-- Grade Level Selection -->
+                    <div>
+                        <label id="lblGrade" class="block text-sm font-bold text-gray-700 mb-2">
+                            Select Grade Level <span class="text-red-500">*</span>
+                        </label>
+                        <select id="gradeSelect" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-cgGold focus:border-cgGold outline-none transition">
+                            <!-- Injected by JS -->
+                        </select>
+                        <p id="gradeError" class="text-xs text-red-500 mt-1 hidden">Please select a grade level.</p>
+                    </div>
+                </div>
+
+                <!-- Info callout -->
+                <div class="bg-cgLightTeal border-l-4 rtl:border-r-4 ltr:border-l-4 border-cgTeal p-4 rounded-xl flex items-start gap-3">
+                    <i class="fa-solid fa-circle-info text-cgTeal text-lg mt-0.5"></i>
+                    <div class="text-xs md:text-sm text-cgDarkTeal space-y-1">
+                        <p id="infoHeading" class="font-bold">Note on Question Options:</p>
+                        <p id="infoDesc">The survey consists of 30 questions divided into 2 sections (15 questions per page). For Grades (2-3 & 4-5), simplified 3-point options will appear. For higher grades, a 5-point scale is used.</p>
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-start">
+                    <button type="button" id="btnStartSurvey" class="bg-cg-gradient text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:opacity-95 transition flex items-center gap-2">
+                        <span id="btnStartText">Start Survey</span>
+                        <i id="btnStartIcon" class="fa-solid fa-arrow-left rtl:inline-block hidden"></i>
+                        <i id="btnStartIconLtr" class="fa-solid fa-arrow-right ltr:inline-block hidden"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- DYNAMIC SURVEY PAGES (PAGES 1 to 2) -->
+            <div id="surveyPageContainer" class="hidden p-6 md:p-8">
+                <!-- Page Title Header -->
+                <div class="border-b pb-4 mb-6 flex justify-between items-center flex-wrap gap-2">
+                    <div>
+                        <h3 id="pageHeaderTitle" class="text-xl font-bold text-cgDarkTeal flex items-center gap-2">
+                            <!-- Injected by JS -->
+                        </h3>
+                        <p id="pageHeaderSub" class="text-xs text-gray-500 mt-1">Please select the response that best reflects your honest opinion.</p>
+                    </div>
+                    <span id="pageBadge" class="bg-cgLightGold text-cgDarkTeal font-bold text-xs px-3 py-1 rounded-full border border-cgGold">
+                        Page 1 / 2
+                    </span>
+                </div>
+
+                <!-- Questions List -->
+                <div id="questionsList" class="space-y-6">
+                    <!-- Injected via JavaScript -->
+                </div>
+
+                <!-- Error Warning Box -->
+                <div id="validationWarning" class="hidden mt-6 bg-red-50 border-l-4 rtl:border-r-4 ltr:border-l-4 border-red-500 p-4 rounded-xl flex items-center gap-3">
+                    <i class="fa-solid fa-triangle-exclamation text-red-500 text-lg"></i>
+                    <p id="valWarningText" class="text-xs md:text-sm text-red-700 font-semibold">
+                        Please answer all questions on this page before proceeding.
+                    </p>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="mt-8 pt-4 border-t flex justify-between items-center">
+                    <button type="button" id="btnPrev" class="bg-gray-200 text-gray-700 px-6 py-2.5 rounded-xl font-bold hover:bg-gray-300 transition flex items-center gap-2">
+                        <i id="btnPrevIcon" class="fa-solid fa-arrow-right rtl:inline-block hidden"></i>
+                        <i id="btnPrevIconLtr" class="fa-solid fa-arrow-left ltr:inline-block hidden"></i>
+                        <span id="btnPrevText">Previous</span>
+                    </button>
+
+                    <button type="button" id="btnNext" class="bg-cg-gradient text-white px-8 py-2.5 rounded-xl font-bold shadow-md hover:shadow-lg transition flex items-center gap-2">
+                        <span id="btnNextText">Next Page</span>
+                        <i id="btnNextIcon" class="fa-solid fa-arrow-left rtl:inline-block hidden"></i>
+                        <i id="btnNextIconLtr" class="fa-solid fa-arrow-right ltr:inline-block hidden"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP COMPLETE: Thank You & Score Display -->
+            <div id="stepSuccess" class="hidden p-8 md:p-12 text-center space-y-6">
+                <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner animate-bounce">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+
+                <div>
+                    <h3 id="succTitle" class="text-2xl md:text-3xl font-extrabold text-cgDarkTeal mb-2">Thank You!</h3>
+                    <p id="succDesc" class="text-gray-600 text-sm md:text-base">Your responses have been successfully saved to the database. Thank you for your valuable feedback!</p>
+                </div>
+
+                <!-- Calculated Scores Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto pt-4">
+                    <div class="bg-cgLightTeal border border-cgTeal/30 rounded-2xl p-5 shadow-sm">
+                        <div id="lblScoreSel" class="text-xs text-cgTeal uppercase font-bold tracking-wider mb-1">SEL Average Score</div>
+                        <div class="text-sm font-semibold text-gray-700 mb-2">Social-Emotional Learning</div>
+                        <div id="selScoreDisplay" class="text-4xl font-extrabold text-cgDarkTeal">0.0 <span class="text-lg font-normal text-gray-500">/ 5</span></div>
+                    </div>
+
+                    <div class="bg-cgLightGold border border-cgGold/40 rounded-2xl p-5 shadow-sm">
+                        <div id="lblScoreMot" class="text-xs text-cgGoldHover uppercase font-bold tracking-wider mb-1">Motivation Average Score</div>
+                        <div class="text-sm font-semibold text-gray-700 mb-2">Motivation & Engagement</div>
+                        <div id="motScoreDisplay" class="text-4xl font-extrabold text-cgDarkTeal">0.0 <span class="text-lg font-normal text-gray-500">/ 5</span></div>
+                    </div>
+                </div>
+
+                <div class="inline-flex items-center gap-2 text-xs text-emerald-700 bg-emerald-50 px-4 py-2 rounded-full border border-emerald-200">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span id="succCloud">Response successfully submitted to Firebase.</span>
+                </div>
+
+                <div class="pt-6">
+                    <button type="button" onclick="location.reload()" class="bg-cgDarkTeal text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:bg-cgTeal transition inline-flex items-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span id="btnRestart">Submit Another Response</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-cgDarkTeal text-white py-5 mt-8 border-t-2 border-cgGold">
+        <div class="max-w-4xl mx-auto px-4 text-center text-xs text-gray-300 space-y-1.5">
+            <p id="footerCopyright">© 2026 Creativity Generation Schools. All Rights Reserved.</p>
+            <p class="text-cgGold font-semibold text-sm tracking-wide">Eng. Mahmoud Mansour</p>
+            <p id="footerTagline" class="text-gray-400 text-[11px]">Towards an Inspiring & Advanced Educational Environment</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK Imports & Main Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDiThj12EYjceD13LGF7s7GgUVZKUkVTiY",
+            authDomain: "cg-analytics-efb4e.firebaseapp.com",
+            projectId: "cg-analytics-efb4e",
+            storageBucket: "cg-analytics-efb4e.firebasestorage.app",
+            messagingSenderId: "759844772709",
+            appId: "1:759844772709:web:af644a3ada57bf134e1f8c",
+            measurementId: "G-61Y9KVL3N0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Language State Default: English
+        let currentLang = 'en';
+
+        // Dictionary
+        const i18n = {
+            ar: {
+                headerSchoolName: "مدارس جيل الإبداع الأهليّة",
+                headerTagline: "صوت الطالب والعملية التعليمية",
+                bannerTag: "استبيان قياس التعلم والدافعية",
+                bannerTitle: "استبيان التعلم الاجتماعي والوجداني والتحفيز",
+                bannerDesc: "رأيك يهمنا جداً! تساعدنا إجاباتك الصادقة في تطوير وتصميم بيئة تعليمية ممتعة ومحفزة للجميع.",
+                setupTitle: "معلومات المادة والمرحلة الدراسية",
+                setupSub: "يرجى اختيار المادة والمرحلة لبدء الاستبيان (دون الحاجة لكتابة اسمك).",
+                lblSubject: "اختر المادة الدراسية",
+                lblGrade: "اختر المرحلة الدراسية",
+                subSelectPlaceholder: "-- اختر المادة --",
+                gradeSelectPlaceholder: "-- اختر المرحلة --",
+                subErr: "الرجاء اختيار المادة الدراسية.",
+                gradeErr: "الرجاء اختيار المرحلة الدراسية.",
+                infoHeading: "تنبيه حول طبيعة الأسئلة:",
+                infoDesc: "يتكون الاستبيان من 30 سؤالاً مقسمة على صفحتين (15 سؤالاً في كل صفحة). بالنسبة للصفوف (2-3 و 4-5) ستظهر خيارات مبسطة، بينما للصفوف العليا سيظهر مقياس تفصيلي.",
+                btnStartText: "بدء الاستبيان",
+                pageHeaderSub: "يرجى اختيار الإجابة الأنسب بناءً على تجربتك بكل صراحة.",
+                valWarningText: "يرجى الإجابة على جميع الأسئلة في هذه الصفحة قبل المتابعة.",
+                btnPrevText: "السابق",
+                btnNextText: "الصفحة التالية",
+                btnSubmitText: "إرسال الاستبيان",
+                submittingText: "جاري الإرسال...",
+                succTitle: "شكراً لك!",
+                succDesc: "تم حفظ إجاباتك بنجاح في قاعدة البيانات. شكراً لمساهمتك القيمة معنا!",
+                lblScoreSel: "درجة التعلم الوجداني",
+                lblScoreMot: "درجة الدافعية والمشاركة",
+                succCloud: "تم إرسال الاستجابة بنجاح إلى Firebase.",
+                btnRestart: "إرسال استجابة أخرى",
+                footerCopyright: "© 2026 مدارس جيل الإبداع الأهليّة. جميع الحقوق محفوظة.",
+                footerTagline: "نحو بيئة تعليمية ملهمة ومتقدمة",
+                sec1Title: "القسم الأول: التعلم الاجتماعي-العاطفي (SEL)",
+                sec2Title: "القسم الثاني: الدافعية والمشاركة (Motivation)",
+                pageBadge: "صفحة",
+                ofPage: "من",
+                completed: "مكتمل",
+                subjects: {
+                    Science: "العلوم",
+                    Math: "الرياضيات",
+                    English: "اللغة الإنجليزية",
+                    Arabic: "اللغة العربية",
+                    Islamic: "الدراسات الإسلامية"
+                },
+                grades: {
+                    "2-3": "الصفوف (2 - 3)",
+                    "4-5": "الصفوف (4 - 5)",
+                    "6-12": "الصفوف من (6 إلى 12)"
+                }
+            },
+            en: {
+                headerSchoolName: "Creativity Generation Schools",
+                headerTagline: "Student Voice & Educational Experience",
+                bannerTag: "Learning & Motivation Survey",
+                bannerTitle: "Social-Emotional Learning & Motivation Survey",
+                bannerDesc: "Your opinion matters! Your honest responses help us improve and create an engaging learning environment for everyone.",
+                setupTitle: "Subject & Grade Level Setup",
+                setupSub: "Please select your subject and grade level to begin (No student name required).",
+                lblSubject: "Select Subject",
+                lblGrade: "Select Grade Level",
+                subSelectPlaceholder: "-- Select Subject --",
+                gradeSelectPlaceholder: "-- Select Grade --",
+                subErr: "Please select a subject.",
+                gradeErr: "Please select a grade level.",
+                infoHeading: "Note on Question Options:",
+                infoDesc: "The survey consists of 30 questions divided into 2 sections (15 questions per page). For Grades (2-3 & 4-5), simplified options will appear. For higher grades, a 5-point scale is used.",
+                btnStartText: "Start Survey",
+                pageHeaderSub: "Please select the response that best reflects your honest opinion.",
+                valWarningText: "Please answer all questions on this page before proceeding.",
+                btnPrevText: "Previous",
+                btnNextText: "Next Page",
+                btnSubmitText: "Submit Survey",
+                submittingText: "Submitting...",
+                succTitle: "Thank You!",
+                succDesc: "Your responses have been successfully saved to the database. Thank you for your valuable feedback!",
+                lblScoreSel: "SEL Average Score",
+                lblScoreMot: "Motivation Average Score",
+                succCloud: "Response successfully submitted to Firebase.",
+                btnRestart: "Submit Another Response",
+                footerCopyright: "© 2026 Creativity Generation Schools. All Rights Reserved.",
+                footerTagline: "Towards an Inspiring & Advanced Educational Environment",
+                sec1Title: "Section 1: Social-Emotional Learning (SEL)",
+                sec2Title: "Section 2: Motivation & Engagement",
+                pageBadge: "Page",
+                ofPage: "of",
+                completed: "completed",
+                subjects: {
+                    Science: "Science",
+                    Math: "Math",
+                    English: "English",
+                    Arabic: "Arabic",
+                    Islamic: "Islamic Studies"
+                },
+                grades: {
+                    "2-3": "Grades (2 - 3)",
+                    "4-5": "Grades (4 - 5)",
+                    "6-12": "Grades (6 - 12)"
+                }
+            }
+        };
+
+        // 30 Questions bilingual
+        const questions = [
+            { id: 1, section: "sel", ar: "أعرف ما أتميز فيه وما يحتاج إلى تحسين في هذه المادة.", en: "I know what I am good at and what I need to improve in this subject." },
+            { id: 2, section: "sel", ar: "أستطيع التعبير عن شعوري عندما تكون المهمة صعبة أو عند ارتكاب خطأ.", en: "I can express how I feel when a task is difficult or when I make a mistake." },
+            { id: 3, section: "sel", ar: "تساعدني هذه المادة على الإيمان بأني أستطيع التحسن بالممارسة.", en: "This subject helps me believe that I can improve with practice." },
+            { id: 4, section: "sel", ar: "أبقَى هادئاً عندما لا تنجح التجربة أو النشاط من المحاولة الأولى.", en: "I stay calm when an activity or experiment does not work on the first try." },
+            { id: 5, section: "sel", ar: "أستمر في المحاولة عندما تكون المشكلة أو الواجب صعباً.", en: "I keep trying when a problem or assignment is difficult." },
+            { id: 6, section: "sel", ar: "أبقى مركّزاً وأنهي عملي في الوقت المحدد.", en: "I stay focused and finish my work on time." },
+            { id: 7, section: "sel", ar: "أستمع بعناية لأفكار زملائي.", en: "I listen carefully to my classmates' ideas." },
+            { id: 8, section: "sel", ar: "أحترم الزملاء الذين تختلف أفكارهم أو إجاباتهم عن أفكاري.", en: "I respect classmates whose ideas or answers are different from mine." },
+            { id: 9, section: "sel", ar: "أساعد الزملاء الذين يجدون صعوبة في المادة.", en: "I help classmates who find this subject difficult." },
+            { id: 10, section: "sel", ar: "أعمل بشكل جيد مع الآخرين خلال المشاريع والأنشطة الجماعية.", en: "I work well with others during group projects and activities." },
+            { id: 11, section: "sel", ar: "أشارك أفكاري بأدب واحترام عند العمل ضمن مجموعة.", en: "I share my ideas politely and respectfully when working in a group." },
+            { id: 12, section: "sel", ar: "تُحل الخلافات داخل مجموعتنا بطريقة محترمة.", en: "Disagreements in our group are resolved respectfully." },
+            { id: 13, section: "sel", ar: "أتبع قواعد السلامة في الفصل والمختبر.", en: "I follow safety rules in the classroom and laboratory." },
+            { id: 14, section: "sel", ar: "أستخدم الأدلة والحقائق لاتخاذ القرارات في تعلمي.", en: "I use evidence and facts to make decisions in my learning." },
+            { id: 15, section: "sel", ar: "تساعدني هذه المادة في اتخاذ خيارات تحمي الناس والبيئة.", en: "This subject helps me make choices that protect people and the environment." },
+
+            { id: 16, section: "mot", ar: "أستمتع بدروسي في هذه المادة.", en: "I enjoy my lessons in this subject." },
+            { id: 17, section: "mot", ar: "أتطلع بشغف لحضور هذه الحصة.", en: "I look forward to attending this class." },
+            { id: 18, section: "mot", ar: "أحب تعلم أمور جديدة تتعلق بهذه المادة.", en: "I like learning new things related to this subject." },
+            { id: 19, section: "mot", ar: "أستطيع فهم ما أتعلمه في هذه المادة.", en: "I can understand what I learn in this subject." },
+            { id: 20, section: "mot", ar: "يمكنني تحقيق أداء ممتاز في هذه المادة إذا بذلت جهداً.", en: "I can do very well in this subject if I put in effort." },
+            { id: 21, section: "mot", ar: "أشعر بالثقة عندما أقوم بأنشطة ومهام الحصة.", en: "I feel confident when doing classroom tasks and activities." },
+            { id: 22, section: "mot", ar: "تساعدني هذه المادة في فهم العالم من حولي.", en: "This subject helps me understand the world around me." },
+            { id: 23, section: "mot", ar: "أستفيد مما أتعلمه في هذه المادة في حياتي اليومية.", en: "I use what I learn in this subject in my daily life." },
+            { id: 24, section: "mot", ar: "هذه المادة مهمة لمستقبلي.", en: "This subject is important for my future." },
+            { id: 25, section: "mot", ar: "أبذل قصارى جهدي، حتى عندما يكون العمل شاقاً.", en: "I try my best, even when the work is hard." },
+            { id: 26, section: "mot", ar: "أطرح الأسئلة عندما أود معرفة المزيد.", en: "I ask questions when I want to learn more." },
+            { id: 27, section: "mot", ar: "أحب استكشاف هذه المادة خارج المدرسة (فيديوهات، كتب، مشاريع).", en: "I like exploring this subject outside of school (videos, books, projects)." },
+            { id: 28, section: "mot", ar: "يجعل المعلم الدروس ممتعة ومشوقة.", en: "The teacher makes lessons interesting and engaging." },
+            { id: 29, section: "mot", ar: "أستمتع بالأنشطة العملية والمهام التطبيقية في الحصة.", en: "I enjoy practical activities and hands-on tasks in class." },
+            { id: 30, section: "mot", ar: "أشعر بالراحة عند مشاركة أفكاري في الفصل.", en: "I feel comfortable sharing my ideas in class." }
+        ];
+
+        // Scales
+        const simpleScale = {
+            ar: [
+                { val: 5, text: "نعم، دائماً", icon: "fa-solid fa-face-smile text-emerald-500" },
+                { val: 3, text: "أحياناً", icon: "fa-solid fa-face-meh text-yellow-500" },
+                { val: 1, text: "لا، ليس حقاً", icon: "fa-solid fa-face-frown text-red-500" }
+            ],
+            en: [
+                { val: 5, text: "Yes, always", icon: "fa-solid fa-face-smile text-emerald-500" },
+                { val: 3, text: "Sometimes", icon: "fa-solid fa-face-meh text-yellow-500" },
+                { val: 1, text: "No, not really", icon: "fa-solid fa-face-frown text-red-500" }
+            ]
+        };
+
+        const fullScale = {
+            ar: [
+                { val: 1, text: "لا أوافق بشدة", icon: "fa-regular fa-face-frown text-red-500" },
+                { val: 2, text: "لا أوافق", icon: "fa-regular fa-face-meh text-orange-400" },
+                { val: 3, text: "غير متأكد", icon: "fa-regular fa-face-straight text-yellow-500" },
+                { val: 4, text: "أوافق", icon: "fa-regular fa-face-smile text-emerald-500" },
+                { val: 5, text: "أوافق بشدة", icon: "fa-regular fa-face-laugh-beam text-green-600" }
+            ],
+            en: [
+                { val: 1, text: "Strongly Disagree", icon: "fa-regular fa-face-frown text-red-500" },
+                { val: 2, text: "Disagree", icon: "fa-regular fa-face-meh text-orange-400" },
+                { val: 3, text: "Unsure", icon: "fa-regular fa-face-straight text-yellow-500" },
+                { val: 4, text: "Agree", icon: "fa-regular fa-face-smile text-emerald-500" },
+                { val: 5, text: "Strongly Agree", icon: "fa-regular fa-face-laugh-beam text-green-600" }
+            ]
+        };
+
+        let currentPage = 0; 
+        const totalPages = 2;
+        const totalQuestionsCount = 30;
+        const questionsPerPage = 15;
+        let studentMeta = { subject: "", grade: "" };
+        let userAnswers = {};
+
+        // DOM elements
+        const htmlDoc = document.getElementById('htmlDoc');
+        const btnToggleLang = document.getElementById('btnToggleLang');
+        const langBtnText = document.getElementById('langBtnText');
+
+        const stepSetup = document.getElementById('stepSetup');
+        const surveyPageContainer = document.getElementById('surveyPageContainer');
+        const stepSuccess = document.getElementById('stepSuccess');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressPercentage = document.getElementById('progressPercentage');
+        const sectionBadgeText = document.getElementById('sectionBadgeText');
+
+        const btnStartSurvey = document.getElementById('btnStartSurvey');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+        const btnNextText = document.getElementById('btnNextText');
+        const validationWarning = document.getElementById('validationWarning');
+
+        // Dynamic Progress Bar Update based on answered questions count
+        function updateProgressBar() {
+            const answeredCount = Object.keys(userAnswers).length;
+            const percent = Math.round((answeredCount / totalQuestionsCount) * 100);
+            
+            progressBar.style.width = `${percent}%`;
+            progressPercentage.innerText = `${percent}% ${i18n[currentLang].completed}`;
+        }
+
+        // Toggle Language function
+        btnToggleLang.addEventListener('click', () => {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            langBtnText.innerText = currentLang === 'ar' ? 'English' : 'العربية';
+            htmlDoc.setAttribute('lang', currentLang);
+            htmlDoc.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+
+            updateStaticUI();
+            populateDropdowns();
+
+            if (currentPage > 0 && currentPage <= totalPages) {
+                renderPage();
+            }
+        });
+
+        function updateStaticUI() {
+            const dict = i18n[currentLang];
+            document.getElementById('headerSchoolName').innerText = dict.headerSchoolName;
+            document.getElementById('headerTagline').innerText = dict.headerTagline;
+            document.getElementById('bannerTag').innerText = dict.bannerTag;
+            document.getElementById('bannerTitle').innerText = dict.bannerTitle;
+            document.getElementById('bannerDesc').innerText = dict.bannerDesc;
+            document.getElementById('setupTitle').innerText = dict.setupTitle;
+            document.getElementById('setupSub').innerText = dict.setupSub;
+            document.getElementById('lblSubject').innerText = dict.lblSubject;
+            document.getElementById('lblGrade').innerText = dict.lblGrade;
+            document.getElementById('subjectError').innerText = dict.subErr;
+            document.getElementById('gradeError').innerText = dict.gradeErr;
+            document.getElementById('infoHeading').innerText = dict.infoHeading;
+            document.getElementById('infoDesc').innerText = dict.infoDesc;
+            document.getElementById('btnStartText').innerText = dict.btnStartText;
+            document.getElementById('pageHeaderSub').innerText = dict.pageHeaderSub;
+            document.getElementById('valWarningText').innerText = dict.valWarningText;
+            document.getElementById('btnPrevText').innerText = dict.btnPrevText;
+            document.getElementById('succTitle').innerText = dict.succTitle;
+            document.getElementById('succDesc').innerText = dict.succDesc;
+            document.getElementById('lblScoreSel').innerText = dict.lblScoreSel;
+            document.getElementById('lblScoreMot').innerText = dict.lblScoreMot;
+            document.getElementById('succCloud').innerText = dict.succCloud;
+            document.getElementById('btnRestart').innerText = dict.btnRestart;
+            document.getElementById('footerCopyright').innerText = dict.footerCopyright;
+            document.getElementById('footerTagline').innerText = dict.footerTagline;
+        }
+
+        function populateDropdowns() {
+            const dict = i18n[currentLang];
+            const subjectSelect = document.getElementById('subjectSelect');
+            const gradeSelect = document.getElementById('gradeSelect');
+
+            const currentSubVal = subjectSelect.value;
+            const currentGradeVal = gradeSelect.value;
+
+            subjectSelect.innerHTML = `
+                <option value="" disabled ${!currentSubVal ? 'selected' : ''}>${dict.subSelectPlaceholder}</option>
+                <option value="Science" ${currentSubVal === 'Science' ? 'selected' : ''}>${dict.subjects.Science}</option>
+                <option value="Math" ${currentSubVal === 'Math' ? 'selected' : ''}>${dict.subjects.Math}</option>
+                <option value="English" ${currentSubVal === 'English' ? 'selected' : ''}>${dict.subjects.English}</option>
+                <option value="Arabic" ${currentSubVal === 'Arabic' ? 'selected' : ''}>${dict.subjects.Arabic}</option>
+                <option value="Islamic Studies" ${currentSubVal === 'Islamic Studies' ? 'selected' : ''}>${dict.subjects.Islamic}</option>
+            `;
+
+            gradeSelect.innerHTML = `
+                <option value="" disabled ${!currentGradeVal ? 'selected' : ''}>${dict.gradeSelectPlaceholder}</option>
+                <option value="2-3" ${currentGradeVal === '2-3' ? 'selected' : ''}>${dict.grades["2-3"]}</option>
+                <option value="4-5" ${currentGradeVal === '4-5' ? 'selected' : ''}>${dict.grades["4-5"]}</option>
+                <option value="6-12" ${currentGradeVal === '6-12' ? 'selected' : ''}>${dict.grades["6-12"]}</option>
+            `;
+        }
+
+        // Initialize UI with English default
+        updateStaticUI();
+        populateDropdowns();
+
+        btnStartSurvey.addEventListener('click', () => {
+            const subject = document.getElementById('subjectSelect').value;
+            const grade = document.getElementById('gradeSelect').value;
+
+            let hasError = false;
+            if (!subject) {
+                document.getElementById('subjectError').classList.remove('hidden');
+                hasError = true;
+            } else {
+                document.getElementById('subjectError').classList.add('hidden');
+            }
+
+            if (!grade) {
+                document.getElementById('gradeError').classList.remove('hidden');
+                hasError = true;
+            } else {
+                document.getElementById('gradeError').classList.add('hidden');
+            }
+
+            if (hasError) return;
+
+            studentMeta = { subject, grade };
+            currentPage = 1;
+            renderPage();
+        });
+
+        btnPrev.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage();
+            } else if (currentPage === 1) {
+                currentPage = 0;
+                stepSetup.classList.remove('hidden');
+                surveyPageContainer.classList.add('hidden');
+                progressContainer.classList.add('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+
+        btnNext.addEventListener('click', async () => {
+            if (currentPage >= 1 && currentPage <= totalPages) {
+                const startIdx = (currentPage - 1) * questionsPerPage;
+                const currentQs = questions.slice(startIdx, startIdx + questionsPerPage);
+                
+                let pageValid = true;
+                for (let q of currentQs) {
+                    if (!userAnswers[q.id]) {
+                        pageValid = false;
+                        break;
+                    }
+                }
+
+                if (!pageValid) {
+                    validationWarning.classList.remove('hidden');
+                    return;
+                }
+                validationWarning.classList.add('hidden');
+
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderPage();
+                } else {
+                    await submitSurveyToFirebase();
+                }
+            }
+        });
+
+        function renderPage() {
+            const dict = i18n[currentLang];
+            stepSetup.classList.add('hidden');
+            surveyPageContainer.classList.remove('hidden');
+            progressContainer.classList.remove('hidden');
+            validationWarning.classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            progressText.innerText = `${dict.pageBadge} ${currentPage} ${dict.ofPage} ${totalPages}`;
+            updateProgressBar();
+
+            const isSEL = currentPage === 1;
+            const headerTitle = document.getElementById('pageHeaderTitle');
+            const pageBadge = document.getElementById('pageBadge');
+
+            if (isSEL) {
+                headerTitle.innerHTML = `<i class="fa-solid fa-heart-pulse text-cgGold"></i> <span>${dict.sec1Title}</span>`;
+                sectionBadgeText.innerText = dict.sec1Title;
+            } else {
+                headerTitle.innerHTML = `<i class="fa-solid fa-rocket text-cgGold"></i> <span>${dict.sec2Title}</span>`;
+                sectionBadgeText.innerText = dict.sec2Title;
+            }
+            pageBadge.innerText = `${dict.pageBadge} ${currentPage} / ${totalPages}`;
+
+            if (currentPage === totalPages) {
+                btnNextText.innerText = dict.btnSubmitText;
+            } else {
+                btnNextText.innerText = dict.btnNextText;
+            }
+
+            const questionsList = document.getElementById('questionsList');
+            questionsList.innerHTML = '';
+
+            const startIdx = (currentPage - 1) * questionsPerPage;
+            const pageQuestions = questions.slice(startIdx, startIdx + questionsPerPage);
+
+            const isYounger = (studentMeta.grade === '2-3' || studentMeta.grade === '4-5');
+            const activeScale = isYounger ? simpleScale[currentLang] : fullScale[currentLang];
+            const gridColsClass = isYounger ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-2 sm:grid-cols-5';
+
+            pageQuestions.forEach((q, idx) => {
+                const globalIndex = startIdx + idx + 1;
+                const qText = currentLang === 'ar' ? q.ar : q.en;
+
+                const qCard = document.createElement('div');
+                qCard.className = "p-5 rounded-2xl bg-gray-50 border border-gray-200 hover:border-cgGold/50 transition shadow-sm space-y-4";
+                
+                qCard.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="flex-shrink-0 bg-cgDarkTeal text-white font-bold text-xs w-7 h-7 rounded-full flex items-center justify-center mt-0.5 shadow">
+                            ${globalIndex}
+                        </span>
+                        <div>
+                            <p class="font-bold text-gray-800 text-sm md:text-base">${qText}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid ${gridColsClass} gap-2 pt-2">
+                        ${activeScale.map(opt => {
+                            const isChecked = userAnswers[q.id] === opt.val;
+                            return `
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="q_${q.id}" value="${opt.val}" class="sr-only custom-radio" ${isChecked ? 'checked' : ''} onchange="window.saveAnswer(${q.id},${opt.val})">
+                                    <div class="option-card h-full border border-gray-300 rounded-xl p-3 text-center flex flex-col items-center justify-between ${isChecked ? 'border-cgGold bg-cgLightGold font-bold text-cgDarkTeal ring-2 ring-cgGold/50' : 'bg-white text-gray-600'}">
+                                        <i class="${opt.icon} text-2xl mb-1.5"></i>
+                                        <span class="text-xs font-semibold leading-tight">${opt.text}</span>
+                                    </div>
+                                </label>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                questionsList.appendChild(qCard);
+            });
+        }
+
+        window.saveAnswer = function(questionId, value) {
+            userAnswers[questionId] = Number(value);
+            validationWarning.classList.add('hidden');
+            updateProgressBar();
+        };
+
+        async function submitSurveyToFirebase() {
+            const dict = i18n[currentLang];
+            btnNext.disabled = true;
+            btnNextText.innerText = dict.submittingText;
+
+            let selSum = 0;
+            let motSum = 0;
+
+            for (let i = 1; i <= 15; i++) selSum += (userAnswers[i] || 0);
+            for (let i = 16; i <= 30; i++) motSum += (userAnswers[i] || 0);
+
+            const selAverage = parseFloat((selSum / 15).toFixed(2));
+            const motAverage = parseFloat((motSum / 15).toFixed(2));
+
+            const payload = {
+                subject: studentMeta.subject,
+                grade: studentMeta.grade,
+                studentName: "Anonymous Student",
+                selAverage: selAverage,
+                motAverage: motAverage,
+                answers: userAnswers,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                await addDoc(collection(db, "responses"), {
+                    ...payload,
+                    createdAt: serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Firebase submission error:", error);
+            }
+
+            document.getElementById('selScoreDisplay').innerHTML = `${selAverage} <span class="text-lg font-normal text-gray-500">/ 5</span>`;
+            document.getElementById('motScoreDisplay').innerHTML = `${motAverage} <span class="text-lg font-normal text-gray-500">/ 5</span>`;
+
+            surveyPageContainer.classList.add('hidden');
+            progressContainer.classList.add('hidden');
+            stepSuccess.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
