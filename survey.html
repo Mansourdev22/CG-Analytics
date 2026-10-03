@@ -419,7 +419,7 @@
             { id: 30, section: "mot", ar: "أشعر بالراحة عند مشاركة أفكاري في الفصل.", en: "I feel comfortable sharing my ideas in class." }
         ];
 
-        // Scales
+        // Scales - Reordered to align with LTR/RTL reading flows
         const simpleScale = {
             ar: [
                 { val: 5, text: "نعم، دائماً", icon: "fa-solid fa-face-smile text-emerald-500" },
@@ -435,18 +435,18 @@
 
         const fullScale = {
             ar: [
-                { val: 1, text: "لا أوافق بشدة", icon: "fa-regular fa-face-frown text-red-500" },
-                { val: 2, text: "لا أوافق", icon: "fa-regular fa-face-meh text-orange-400" },
-                { val: 3, text: "غير متأكد", icon: "fa-regular fa-face-straight text-yellow-500" },
+                { val: 5, text: "أوافق بشدة", icon: "fa-regular fa-face-laugh-beam text-green-600" },
                 { val: 4, text: "أوافق", icon: "fa-regular fa-face-smile text-emerald-500" },
-                { val: 5, text: "أوافق بشدة", icon: "fa-regular fa-face-laugh-beam text-green-600" }
+                { val: 3, text: "غير متأكد", icon: "fa-regular fa-face-straight text-yellow-500" },
+                { val: 2, text: "لا أوافق", icon: "fa-regular fa-face-meh text-orange-400" },
+                { val: 1, text: "لا أوافق بشدة", icon: "fa-regular fa-face-frown text-red-500" }
             ],
             en: [
-                { val: 1, text: "Strongly Disagree", icon: "fa-regular fa-face-frown text-red-500" },
-                { val: 2, text: "Disagree", icon: "fa-regular fa-face-meh text-orange-400" },
-                { val: 3, text: "Unsure", icon: "fa-regular fa-face-straight text-yellow-500" },
+                { val: 5, text: "Strongly Agree", icon: "fa-regular fa-face-laugh-beam text-green-600" },
                 { val: 4, text: "Agree", icon: "fa-regular fa-face-smile text-emerald-500" },
-                { val: 5, text: "Strongly Agree", icon: "fa-regular fa-face-laugh-beam text-green-600" }
+                { val: 3, text: "Unsure", icon: "fa-regular fa-face-straight text-yellow-500" },
+                { val: 2, text: "Disagree", icon: "fa-regular fa-face-meh text-orange-400" },
+                { val: 1, text: "Strongly Disagree", icon: "fa-regular fa-face-frown text-red-500" }
             ]
         };
 
