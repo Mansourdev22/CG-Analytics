@@ -345,7 +345,6 @@
                         this.radarData = [0, 0, 0, 0, 0];
                         this.barData = [0, 0, 0, 0, 0];
                         
-                        // تصفير جميع الأسئلة
                         this.selQuestionsList.forEach(q => q.score = 0);
                         this.motQuestionsList.forEach(q => q.score = 0);
 
@@ -362,19 +361,62 @@
                     this.kpis.motScore = (motSum / docs.length).toFixed(2);
                     this.kpis.satisfaction = Math.round((this.kpis.selScore / 5) * 100);
 
-                    // تحديث القيم الحقيقية للرسوم البيانية والأسئلة إن وجدت استجابات
-                    if (docs[0].itemScores) {
-                        this.selQuestionsList.forEach((q, i) => {
-                            if (docs[0].itemScores.sel && docs[0].itemScores.sel[i] !== undefined) {
-                                q.score = docs[0].itemScores.sel[i];
+                    // حساب متوسطات الأسئلة الـ 30 الفردية مباشرة من الإجابات الواردة
+                    let selItemTotals = new Array(15).fill(0);
+                    let motItemTotals = new Array(15).fill(0);
+                    let counts = docs.length;
+
+                    docs.forEach(doc => {
+                        if (doc.answers) {
+                            for (let i = 1; i <= 15; i++) {
+                                selItemTotals[i - 1] += (doc.answers[i] || 0);
                             }
-                        });
-                        this.motQuestionsList.forEach((q, i) => {
-                            if (docs[0].itemScores.mot && docs[0].itemScores.mot[i] !== undefined) {
-                                q.score = docs[0].itemScores.mot[i];
+                            for (let i = 16; i <= 30; i++) {
+                                motItemTotals[i - 16] += (doc.answers[i] || 0);
                             }
-                        });
-                    }
+                        }
+                    });
+
+                    // تحديث درجات أسئلة الـ SEL (تحويل المتوسط من 5 إلى نسبة مئوية)
+                    this.selQuestionsList.forEach((q, i) => {
+                        let avgScore = selItemTotals[i] / counts;
+                        q.score = Math.round((avgScore / 5) * 100);
+                    });
+
+                    // تحديث درجات أسئلة الـ Motivation
+                    this.motQuestionsList.forEach((q, i) => {
+                        let avgScore = motItemTotals[i] / counts;
+                        q.score = Math.round((avgScore / 5) * 100);
+                    });
+
+                    // حساب معدلات المهارات للرادار والأعمدة البيانية (من 5)
+                    let selCat1 = (selItemTotals[0] + selItemTotals[1] + selItemTotals[2]) / (counts * 3);
+                    let selCat2 = (selItemTotals[3] + selItemTotals[4] + selItemTotals[5]) / (counts * 3);
+                    let selCat3 = (selItemTotals[6] + selItemTotals[7] + selItemTotals[8]) / (counts * 3);
+                    let selCat4 = (selItemTotals[9] + selItemTotals[10] + selItemTotals[11]) / (counts * 3);
+                    let selCat5 = (selItemTotals[12] + selItemTotals[13] + selItemTotals[14]) / (counts * 3);
+
+                    this.radarData = [
+                        parseFloat(selCat1.toFixed(2)),
+                        parseFloat(selCat2.toFixed(2)),
+                        parseFloat(selCat3.toFixed(2)),
+                        parseFloat(selCat4.toFixed(2)),
+                        parseFloat(selCat5.toFixed(2))
+                    ];
+
+                    let motCat1 = (motItemTotals[0] + motItemTotals[1] + motItemTotals[2]) / (counts * 3);
+                    let motCat2 = (motItemTotals[3] + motItemTotals[4] + motItemTotals[5]) / (counts * 3);
+                    let motCat3 = (motItemTotals[6] + motItemTotals[7] + motItemTotals[8]) / (counts * 3);
+                    let motCat4 = (motItemTotals[9] + motItemTotals[10] + motItemTotals[11]) / (counts * 3);
+                    let motCat5 = (motItemTotals[12] + motItemTotals[13] + motItemTotals[14]) / (counts * 3);
+
+                    this.barData = [
+                        parseFloat(motCat1.toFixed(2)),
+                        parseFloat(motCat2.toFixed(2)),
+                        parseFloat(motCat3.toFixed(2)),
+                        parseFloat(motCat4.toFixed(2)),
+                        parseFloat(motCat5.toFixed(2))
+                    ];
 
                     this.renderCharts();
                 },
