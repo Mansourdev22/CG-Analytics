@@ -36,7 +36,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // بيانات مشروع Firebase الخاص بك (CG-Analytics)
         const firebaseConfig = {
             apiKey: "AIzaSyDiThj12EYjceD13LGF7s7GgUVZKUkVTiY",
             authDomain: "cg-analytics-efb4e.firebaseapp.com",
@@ -47,11 +46,9 @@
             measurementId: "G-61Y9KVL3N0"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // إتاحة الكائنات إقليمياً لـ Alpine.js
         window.db = db;
         window.firestoreTools = { collection, onSnapshot, query, where };
     </script>
@@ -112,7 +109,7 @@
         <!-- Footer Info -->
         <div class="pt-6 border-t border-white/10">
             <div class="text-center text-[10px] text-white/50">
-                <span>MansourDev22 • 2026</span>
+                <span>Eng. Mahmoud Mansour • 2026</span>
             </div>
         </div>
     </aside>
@@ -269,39 +266,39 @@
                 unsubscribeListener: null,
 
                 selQuestionsList: [
-                    { category: 'Self-Awareness', text: 'I know what I am good at and what I need to improve in this subject.', score: 0 },
-                    { category: 'Self-Awareness', text: 'I can tell how I feel when a task is hard or when I make a mistake.', score: 0 },
-                    { category: 'Self-Awareness', text: 'This subject helps me believe I can get better by practicing.', score: 0 },
-                    { category: 'Self-Management', text: 'I stay calm when an activity or experiment does not work the first time.', score: 0 },
-                    { category: 'Self-Management', text: 'I keep trying when a problem or assignment is difficult.', score: 0 },
-                    { category: 'Self-Management', text: 'I stay focused and finish my work on time.', score: 0 },
-                    { category: 'Social Awareness', text: "I listen carefully to my classmates' ideas.", score: 0 },
-                    { category: 'Social Awareness', text: 'I respect classmates whose ideas or answers are different from mine.', score: 0 },
-                    { category: 'Social Awareness', text: 'I help classmates who find the subject difficult.', score: 0 },
-                    { category: 'Relationship Skills', text: 'I work well with others during group projects and activities.', score: 0 },
-                    { category: 'Relationship Skills', text: 'I share my ideas politely when working in a group.', score: 0 },
-                    { category: 'Relationship Skills', text: 'My group solves disagreements in a respectful way.', score: 0 },
-                    { category: 'Responsible Decision', text: 'I follow safety rules in the classroom and lab.', score: 0 },
-                    { category: 'Responsible Decision', text: 'I use evidence and facts to make decisions in my learning.', score: 0 },
-                    { category: 'Responsible Decision', text: 'This subject helps me make choices that protect people and the environment.', score: 0 }
+                    { id: 1, category: 'Self-Awareness', text: 'I know what I am good at and what I need to improve in this subject.', score: 0 },
+                    { id: 2, category: 'Self-Awareness', text: 'I can tell how I feel when a task is hard or when I make a mistake.', score: 0 },
+                    { id: 3, category: 'Self-Awareness', text: 'This subject helps me believe I can get better by practicing.', score: 0 },
+                    { id: 4, category: 'Self-Management', text: 'I stay calm when an activity or experiment does not work the first time.', score: 0 },
+                    { id: 5, category: 'Self-Management', text: 'I keep trying when a problem or assignment is difficult.', score: 0 },
+                    { id: 6, category: 'Self-Management', text: 'I stay focused and finish my work on time.', score: 0 },
+                    { id: 7, category: 'Social Awareness', text: "I listen carefully to my classmates' ideas.", score: 0 },
+                    { id: 8, category: 'Social Awareness', text: 'I respect classmates whose ideas or answers are different from mine.', score: 0 },
+                    { id: 9, category: 'Social Awareness', text: 'I help classmates who find the subject difficult.', score: 0 },
+                    { id: 10, category: 'Relationship Skills', text: 'I work well with others during group projects and activities.', score: 0 },
+                    { id: 11, category: 'Relationship Skills', text: 'I share my ideas politely when working in a group.', score: 0 },
+                    { id: 12, category: 'Relationship Skills', text: 'My group solves disagreements in a respectful way.', score: 0 },
+                    { id: 13, category: 'Responsible Decision', text: 'I follow safety rules in the classroom and lab.', score: 0 },
+                    { id: 14, category: 'Responsible Decision', text: 'I use evidence and facts to make decisions in my learning.', score: 0 },
+                    { id: 15, category: 'Responsible Decision', text: 'This subject helps me make choices that protect people and the environment.', score: 0 }
                 ],
 
                 motQuestionsList: [
-                    { category: 'Enjoyment', text: 'I enjoy my lessons in this subject.', score: 0 },
-                    { category: 'Enjoyment', text: 'I look forward to attending this class.', score: 0 },
-                    { category: 'Enjoyment', text: 'I like learning new things about this subject.', score: 0 },
-                    { category: 'Confidence', text: 'I can understand what I learn in this subject.', score: 0 },
-                    { category: 'Confidence', text: 'I can do well in this subject if I try.', score: 0 },
-                    { category: 'Confidence', text: 'I feel confident when I do class activities and assignments.', score: 0 },
-                    { category: 'Utility', text: 'This subject helps me understand the world around me.', score: 0 },
-                    { category: 'Utility', text: 'I use what I learn in this subject in my daily life.', score: 0 },
-                    { category: 'Utility', text: 'This subject is important for my future.', score: 0 },
-                    { category: 'Engagement', text: 'I try my best, even when the work is hard.', score: 0 },
-                    { category: 'Engagement', text: 'I ask questions when I want to know more.', score: 0 },
-                    { category: 'Engagement', text: 'I like exploring this subject outside school (videos, books, projects).', score: 0 },
-                    { category: 'Environment', text: 'My teacher makes lessons interesting.', score: 0 },
-                    { category: 'Environment', text: 'I enjoy hands-on activities and practical tasks in class.', score: 0 },
-                    { category: 'Environment', text: 'I feel comfortable sharing my ideas in class.', score: 0 }
+                    { id: 16, category: 'Enjoyment', text: 'I enjoy my lessons in this subject.', score: 0 },
+                    { id: 17, category: 'Enjoyment', text: 'I look forward to attending this class.', score: 0 },
+                    { id: 18, category: 'Enjoyment', text: 'I like learning new things about this subject.', score: 0 },
+                    { id: 19, category: 'Confidence', text: 'I can understand what I learn in this subject.', score: 0 },
+                    { id: 20, category: 'Confidence', text: 'I can do well in this subject if I try.', score: 0 },
+                    { id: 21, category: 'Confidence', text: 'I feel confident when I do class activities and assignments.', score: 0 },
+                    { id: 22, category: 'Utility', text: 'This subject helps me understand the world around me.', score: 0 },
+                    { id: 23, category: 'Utility', text: 'I use what I learn in this subject in my daily life.', score: 0 },
+                    { id: 24, category: 'Utility', text: 'This subject is important for my future.', score: 0 },
+                    { id: 25, category: 'Engagement', text: 'I try my best, even when the work is hard.', score: 0 },
+                    { id: 26, category: 'Engagement', text: 'I ask questions when I want to know more.', score: 0 },
+                    { id: 27, category: 'Engagement', text: 'I like exploring this subject outside school (videos, books, projects).', score: 0 },
+                    { id: 28, category: 'Environment', text: 'My teacher makes lessons interesting.', score: 0 },
+                    { id: 29, category: 'Environment', text: 'I enjoy hands-on activities and practical tasks in class.', score: 0 },
+                    { id: 30, category: 'Environment', text: 'I feel comfortable sharing my ideas in class.', score: 0 }
                 ],
 
                 init() {
@@ -322,7 +319,7 @@
                     const { collection, onSnapshot, query, where } = window.firestoreTools;
                     const responsesRef = collection(window.db, "responses");
 
-                    let q = query(responsesRef, where("subject", "==", this.selectedSubject));
+                    let q = query(responsesRef, where("subject", "==", this.selectedSubject.toLowerCase()));
 
                     this.unsubscribeListener = onSnapshot(q, (snapshot) => {
                         let docs = snapshot.docs.map(doc => doc.data());
@@ -333,7 +330,7 @@
 
                         this.processFirebaseData(docs);
                     }, (error) => {
-                        console.log("Firestore status: Waiting for initial data collection creation.");
+                        console.error("Firestore listening error:", error);
                     });
                 },
                 processFirebaseData(docs) {
@@ -357,65 +354,63 @@
                     let selSum = docs.reduce((acc, curr) => acc + (curr.selAverage || 0), 0);
                     let motSum = docs.reduce((acc, curr) => acc + (curr.motAverage || 0), 0);
 
-                    this.kpis.selScore = (selSum / docs.length).toFixed(2);
-                    this.kpis.motScore = (motSum / docs.length).toFixed(2);
-                    this.kpis.satisfaction = Math.round((this.kpis.selScore / 5) * 100);
+                    const avgSel = (selSum / docs.length);
+                    const avgMot = (motSum / docs.length);
 
-                    // حساب متوسطات الأسئلة الـ 30 الفردية مباشرة من الإجابات الواردة
-                    let selItemTotals = new Array(15).fill(0);
-                    let motItemTotals = new Array(15).fill(0);
-                    let counts = docs.length;
+                    this.kpis.selScore = avgSel.toFixed(2);
+                    this.kpis.motScore = avgMot.toFixed(2);
+                    this.kpis.satisfaction = Math.round((avgSel / 5) * 100);
 
+                    // Calculate average score per question (1..30)
+                    const questionTotals = {};
                     docs.forEach(doc => {
                         if (doc.answers) {
-                            for (let i = 1; i <= 15; i++) {
-                                selItemTotals[i - 1] += (doc.answers[i] || 0);
-                            }
-                            for (let i = 16; i <= 30; i++) {
-                                motItemTotals[i - 16] += (doc.answers[i] || 0);
-                            }
+                            Object.keys(doc.answers).forEach(qId => {
+                                questionTotals[qId] = (questionTotals[qId] || 0) + Number(doc.answers[qId]);
+                            });
                         }
                     });
 
-                    // تحديث درجات أسئلة الـ SEL (تحويل المتوسط من 5 إلى نسبة مئوية)
-                    this.selQuestionsList.forEach((q, i) => {
-                        let avgScore = selItemTotals[i] / counts;
-                        q.score = Math.round((avgScore / 5) * 100);
+                    this.selQuestionsList.forEach(q => {
+                        const sum = questionTotals[q.id] || 0;
+                        const avg = sum / docs.length;
+                        q.score = Math.round((avg / 5) * 100);
                     });
 
-                    // تحديث درجات أسئلة الـ Motivation
-                    this.motQuestionsList.forEach((q, i) => {
-                        let avgScore = motItemTotals[i] / counts;
-                        q.score = Math.round((avgScore / 5) * 100);
+                    this.motQuestionsList.forEach(q => {
+                        const sum = questionTotals[q.id] || 0;
+                        const avg = sum / docs.length;
+                        q.score = Math.round((avg / 5) * 100);
                     });
 
-                    // حساب معدلات المهارات للرادار والأعمدة البيانية (من 5)
-                    let selCat1 = (selItemTotals[0] + selItemTotals[1] + selItemTotals[2]) / (counts * 3);
-                    let selCat2 = (selItemTotals[3] + selItemTotals[4] + selItemTotals[5]) / (counts * 3);
-                    let selCat3 = (selItemTotals[6] + selItemTotals[7] + selItemTotals[8]) / (counts * 3);
-                    let selCat4 = (selItemTotals[9] + selItemTotals[10] + selItemTotals[11]) / (counts * 3);
-                    let selCat5 = (selItemTotals[12] + selItemTotals[13] + selItemTotals[14]) / (counts * 3);
+                    // Calculate 5 Radar Categories (SEL)
+                    const selCat1 = (this.selQuestionsList[0].score + this.selQuestionsList[1].score + this.selQuestionsList[2].score) / 3 / 20;
+                    const selCat2 = (this.selQuestionsList[3].score + this.selQuestionsList[4].score + this.selQuestionsList[5].score) / 3 / 20;
+                    const selCat3 = (this.selQuestionsList[6].score + this.selQuestionsList[7].score + this.selQuestionsList[8].score) / 3 / 20;
+                    const selCat4 = (this.selQuestionsList[9].score + this.selQuestionsList[10].score + this.selQuestionsList[11].score) / 3 / 20;
+                    const selCat5 = (this.selQuestionsList[12].score + this.selQuestionsList[13].score + this.selQuestionsList[14].score) / 3 / 20;
 
                     this.radarData = [
-                        parseFloat(selCat1.toFixed(2)),
-                        parseFloat(selCat2.toFixed(2)),
-                        parseFloat(selCat3.toFixed(2)),
-                        parseFloat(selCat4.toFixed(2)),
-                        parseFloat(selCat5.toFixed(2))
+                        selCat1.toFixed(2),
+                        selCat2.toFixed(2),
+                        selCat3.toFixed(2),
+                        selCat4.toFixed(2),
+                        selCat5.toFixed(2)
                     ];
 
-                    let motCat1 = (motItemTotals[0] + motItemTotals[1] + motItemTotals[2]) / (counts * 3);
-                    let motCat2 = (motItemTotals[3] + motItemTotals[4] + motItemTotals[5]) / (counts * 3);
-                    let motCat3 = (motItemTotals[6] + motItemTotals[7] + motItemTotals[8]) / (counts * 3);
-                    let motCat4 = (motItemTotals[9] + motItemTotals[10] + motItemTotals[11]) / (counts * 3);
-                    let motCat5 = (motItemTotals[12] + motItemTotals[13] + motItemTotals[14]) / (counts * 3);
+                    // Calculate 5 Bar Categories (Motivation)
+                    const motCat1 = (this.motQuestionsList[0].score + this.motQuestionsList[1].score + this.motQuestionsList[2].score) / 3 / 20;
+                    const motCat2 = (this.motQuestionsList[3].score + this.motQuestionsList[4].score + this.motQuestionsList[5].score) / 3 / 20;
+                    const motCat3 = (this.motQuestionsList[6].score + this.motQuestionsList[7].score + this.motQuestionsList[8].score) / 3 / 20;
+                    const motCat4 = (this.motQuestionsList[9].score + this.motQuestionsList[10].score + this.motQuestionsList[11].score) / 3 / 20;
+                    const motCat5 = (this.motQuestionsList[12].score + this.motQuestionsList[13].score + this.motQuestionsList[14].score) / 3 / 20;
 
                     this.barData = [
-                        parseFloat(motCat1.toFixed(2)),
-                        parseFloat(motCat2.toFixed(2)),
-                        parseFloat(motCat3.toFixed(2)),
-                        parseFloat(motCat4.toFixed(2)),
-                        parseFloat(motCat5.toFixed(2))
+                        motCat1.toFixed(2),
+                        motCat2.toFixed(2),
+                        motCat3.toFixed(2),
+                        motCat4.toFixed(2),
+                        motCat5.toFixed(2)
                     ];
 
                     this.renderCharts();
