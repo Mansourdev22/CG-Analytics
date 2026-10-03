@@ -321,11 +321,11 @@
                 ofPage: "من",
                 completed: "مكتمل",
                 subjects: {
-                    Science: "العلوم",
-                    Math: "الرياضيات",
-                    English: "اللغة الإنجليزية",
-                    Arabic: "اللغة العربية",
-                    Islamic: "الدراسات الإسلامية"
+                    science: "العلوم",
+                    math: "الرياضيات",
+                    english: "اللغة الإنجليزية",
+                    arabic: "اللغة العربية",
+                    islamic: "الدراسات الإسلامية"
                 },
                 grades: {
                     "2-3": "الصفوف (2 - 3)",
@@ -370,11 +370,11 @@
                 ofPage: "of",
                 completed: "completed",
                 subjects: {
-                    Science: "Science",
-                    Math: "Math",
-                    English: "English",
-                    Arabic: "Arabic",
-                    Islamic: "Islamic Studies"
+                    science: "Science",
+                    math: "Math",
+                    english: "English",
+                    arabic: "Arabic",
+                    islamic: "Islamic Studies"
                 },
                 grades: {
                     "2-3": "Grades (2 - 3)",
@@ -538,13 +538,14 @@
             const currentSubVal = subjectSelect.value;
             const currentGradeVal = gradeSelect.value;
 
+            // Notice lower-case values for matching dashboard queries
             subjectSelect.innerHTML = `
                 <option value="" disabled ${!currentSubVal ? 'selected' : ''}>${dict.subSelectPlaceholder}</option>
-                <option value="Science" ${currentSubVal === 'Science' ? 'selected' : ''}>${dict.subjects.Science}</option>
-                <option value="Math" ${currentSubVal === 'Math' ? 'selected' : ''}>${dict.subjects.Math}</option>
-                <option value="English" ${currentSubVal === 'English' ? 'selected' : ''}>${dict.subjects.English}</option>
-                <option value="Arabic" ${currentSubVal === 'Arabic' ? 'selected' : ''}>${dict.subjects.Arabic}</option>
-                <option value="Islamic Studies" ${currentSubVal === 'Islamic Studies' ? 'selected' : ''}>${dict.subjects.Islamic}</option>
+                <option value="science" ${currentSubVal === 'science' ? 'selected' : ''}>${dict.subjects.science}</option>
+                <option value="math" ${currentSubVal === 'math' ? 'selected' : ''}>${dict.subjects.math}</option>
+                <option value="english" ${currentSubVal === 'english' ? 'selected' : ''}>${dict.subjects.english}</option>
+                <option value="arabic" ${currentSubVal === 'arabic' ? 'selected' : ''}>${dict.subjects.arabic}</option>
+                <option value="islamic" ${currentSubVal === 'islamic' ? 'selected' : ''}>${dict.subjects.islamic}</option>
             `;
 
             gradeSelect.innerHTML = `
@@ -555,7 +556,7 @@
             `;
         }
 
-        // Initialize UI with English default
+        // Initialize UI
         updateStaticUI();
         populateDropdowns();
 
@@ -723,7 +724,7 @@
             const motAverage = parseFloat((motSum / 15).toFixed(2));
 
             const payload = {
-                subject: studentMeta.subject,
+                subject: studentMeta.subject.toLowerCase(), // lowercase for exact query matching
                 grade: studentMeta.grade,
                 studentName: "Anonymous Student",
                 selAverage: selAverage,
